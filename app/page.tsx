@@ -1,69 +1,37 @@
-import Image from "next/image";
+'use client';
+
+import Link from "next/link";
+import { useState } from "react";
+import { ArrowRight, ArrowUpRight, ShieldCheck, Truck, Layers3, Sun, MapPin, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { products } from "@/lib/roofing-products";
+import { useRoofingQuote } from "@/components/maisha/site-layout";
+
+const categories = ["All roofing", "Box profiles", "Tile profiles"];
+
+// Home hero image — imported from public folder
+const homeImage = "/maisha-home.jpg";
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  const [category, setCategory] = useState("All roofing");
+  const [detail, setDetail] = useState<(typeof products)[number] | null>(null);
+  const visibleProducts = products.filter(p => category === "All roofing" || (category === "Box profiles" ? p.category === "Box profile" : p.category === "Tile profile"));
+  const showQuote = useRoofingQuote();
+  function openQuote(product = "") { showQuote(product); setDetail(null); }
+  return <>
+    <main>
+      <section id="home" className="hero"><img className="hero-image" src={homeImage} alt="Illustrative Kenyan home with a terracotta metal roof and green gardens" width={1920} height={1024} fetchPriority="high" /><div className="page-width hero-inner"><div className="eyebrow">Maisha Mabati · Mabati for life</div><h1>Quality roofing.<span>Built for life.</span></h1><p className="hero-copy">For the home you dream of. For the future you're building. Discover roofing that shelters you today and tomorrow.</p><div className="hero-actions"><Button asChild size="lg"><a href="#products">Explore Our Roofing <ArrowRight /></a></Button><Button variant="hero" size="lg" onClick={() => openQuote()}>Order on WhatsApp <ArrowUpRight /></Button></div></div><div className="page-width hero-bottom"><span className="hero-location"><MapPin size={12} /> Made in Kenya. Made for your home.</span><span>SHELTERING YOU TODAY & TOMORROW</span></div></section>
+      <section className="trust-strip" aria-label="Maisha roofing benefits"><div className="page-width trust-inner">{[
+        { icon: ShieldCheck, title: "KEBS certified quality", text: "Standards you can trust" },
+        { icon: Sun, title: "Built for our climate", text: "Durable, weather-ready roofing" },
+        { icon: Layers3, title: "A roof for every vision", text: "A variety of profiles & colours" },
+        { icon: Truck, title: "Available countrywide", text: "Closer to your next project" },
+      ].map(item => <div className="trust-item" key={item.title}><item.icon /><div><strong>{item.title}</strong><small>{item.text}</small></div></div>)}</div></section>
+      <section id="products" className="page-width products-section"><div className="eyebrow text-primary">Find your perfect roof</div><div className="section-heading"><h2>Different styles.<br />The same Maisha quality.</h2><p>From timeless tiles to contemporary profiles, find the right finish for your home, your project, and your budget.</p></div><div className="product-tabs" aria-label="Filter roofing products">{categories.map(tab => <Button key={tab} variant={category === tab ? "tabActive" : "tab"} size="sm" aria-pressed={category === tab} onClick={() => setCategory(tab)}>{tab}</Button>)}</div><div className="product-grid">{visibleProducts.map(product => <article className="product-card" key={product.name}><div className="product-image"><img src={product.image} alt={product.name + " roofing sheet"} loading="lazy" width={600} height={600} /><span className="product-category">{product.category}</span></div><div className="product-content"><h3>{product.name}</h3><p>{product.description}</p><div className="product-footer"><div className="swatches" aria-label="Enquire about available colours"><span className="swatch" /><span className="swatch green" /><span className="swatch blue" /><span className="swatch grey" /><span className="swatch terracotta" /></div><Button variant="product" size="sm" onClick={() => setDetail(product)}>View product <ArrowUpRight /></Button></div></div></article>)}</div><div className="products-more"><Button variant="outline" asChild size="lg"><Link href="/products">View All Products <ArrowRight /></Link></Button></div></section>
+      <section id="about" className="about-section"><div className="page-width about-inner"><img className="about-image" src={homeImage} alt="Illustrative home showing the appearance of a metal roof" loading="lazy" width={1920} height={1024} /><div className="about-copy"><div className="eyebrow text-primary">The Maisha difference</div><h2>More than a roof.<br />A promise of shelter.</h2><p>A home is one of life's biggest investments. At Maisha Mabati, we believe quality roofing should be within reach of every Kenyan. Our steel roofing sheets bring together strength, lasting protection, and a finish you can be proud of.</p><div className="about-points"><span><Check /> Durable steel</span><span><Check /> Customised sizes</span><span><Check /> Value for money</span></div><Button variant="outline" asChild><Link href="/why-maisha">Our Story <ArrowUpRight /></Link></Button></div></div></section>
+      <section id="contact" className="quote-band"><div className="page-width quote-band-inner"><div><h2>Let's put a roof on your vision.</h2><p>Quotes, orders, and feedback — chat with our team on WhatsApp. Fast, personal, and made for how Kenyans buy.</p></div><Button variant="inverse" size="lg" onClick={() => openQuote()}>Start on WhatsApp <ArrowUpRight /></Button></div></section>
+    </main>
+    <Dialog open={detail !== null} onOpenChange={open => { if (!open) setDetail(null); }}><DialogContent><DialogHeader><DialogTitle>{detail?.name}</DialogTitle><DialogDescription>{detail?.category}</DialogDescription></DialogHeader>{detail && <><img src={detail.image} alt={detail.name} className="detail-image" /><p className="detail-copy">{detail.description} Contact the Maisha sales team to confirm colours, gauges, sizes and current pricing for your project.</p><Button size="lg" onClick={() => openQuote(detail.name)}>Order on WhatsApp <ArrowRight /></Button></>}</DialogContent></Dialog>
+  </>;
 }

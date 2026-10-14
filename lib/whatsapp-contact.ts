@@ -1,0 +1,42 @@
+export const WHATSAPP_E164 = "254755510009";
+export const WHATSAPP_DISPLAY = "+254 755 510 009";
+
+export type WhatsAppEnquiryKind = "quote" | "order" | "feedback";
+
+export function whatsAppUrl(text: string): string {
+  return `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(text)}`;
+}
+
+export function openWhatsApp(text: string): void {
+  window.open(whatsAppUrl(text), "_blank", "noopener,noreferrer");
+}
+
+export function buildWhatsAppMessage(
+  kind: WhatsAppEnquiryKind,
+  options: { product?: string; notes?: string } = {},
+): string {
+  const product = options.product?.trim();
+  const notes = options.notes?.trim();
+  const productLine = product ? `\nProduct: ${product}` : "";
+  const notesBlock = notes ? `\n\nDetails:\n${notes}` : "\n\n[Add your location, quantities, colours, or questions here]";
+
+  if (kind === "order") {
+    return `Hello Maisha Mabati 👋
+
+I would like to place a roofing order.${productLine}${notesBlock}
+
+Thank you.`;
+  }
+  if (kind === "feedback") {
+    return `Hello Maisha Mabati 👋
+
+I would like to share feedback about my experience.${notesBlock}
+
+Thank you.`;
+  }
+  return `Hello Maisha Mabati 👋
+
+I would like a roofing quotation.${productLine}${notesBlock}
+
+Thank you.`;
+}
