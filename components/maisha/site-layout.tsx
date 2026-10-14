@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { ArrowUpRight, ShieldCheck, Phone, Menu, X, ChevronDown, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { brandLogoUrl } from "@/lib/brand-media";
-import { WHATSAPP_DISPLAY, buildWhatsAppMessage, whatsAppUrl } from "@/lib/whatsapp-contact";
+import { SALES_PHONE_TEL, WHATSAPP_DISPLAY, buildWhatsAppMessage, whatsAppUrl } from "@/lib/whatsapp-contact";
 import { RoofingAssistant } from "./roofing-assistant";
 import { WhatsAppOrderDialog } from "./whatsapp-order-dialog";
 
@@ -34,8 +34,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <a href={whatsAppUrl(buildWhatsAppMessage("order"))} target="_blank" rel="noopener noreferrer">
               <MessageCircle size={12} /> Order on WhatsApp · {WHATSAPP_DISPLAY}
             </a>
-            <a href="tel:+254709110000">
-              <Phone size={11} /> +254 709 110 000
+            <a href={SALES_PHONE_TEL}>
+              <Phone size={11} /> {WHATSAPP_DISPLAY}
             </a>
           </div>
         </div>
@@ -118,8 +118,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <a href={whatsAppUrl(buildWhatsAppMessage("order"))} target="_blank" rel="noopener noreferrer">
                 WhatsApp {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
               </a>
-              <a href="tel:+254709110000">
-                Call Us <ArrowUpRight className="inline size-3" />
+              <a href={SALES_PHONE_TEL}>
+                Call {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
               </a>
             </div>
           </div>

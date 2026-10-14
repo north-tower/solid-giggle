@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { products } from "@/lib/roofing-products";
 import {
+  SALES_PHONE_TEL,
   WHATSAPP_DISPLAY,
   buildWhatsAppMessage,
   openWhatsApp,
@@ -102,8 +103,8 @@ export function WhatsAppOrderDialog({
           </Button>
           <p className="whatsapp-order-foot">
             Prefer a call?{" "}
-            <a href="tel:+254709110000">
-              +254 709 110 000 <ArrowUpRight className="inline size-3" />
+            <a href={SALES_PHONE_TEL}>
+              {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
             </a>
           </p>
         </div>

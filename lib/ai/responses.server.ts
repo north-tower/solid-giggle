@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamText, type ModelMessage } from "ai";
 
+import { WHATSAPP_DISPLAY } from "@/lib/whatsapp-contact";
 import {
   createLovableAiGatewayRunIdFetch,
   getLovableAiGatewayRunId,
@@ -57,7 +58,7 @@ export function createResponsesCall(
         originalMessages,
         sendReasoning: true,
         onFinish: () => { /* Session-only: intentionally no conversation storage. */ },
-        onError: () => upstreamError?.message ?? "The assistant could not respond. Please try again or call +254 709 110 000.",
+        onError: () => upstreamError?.message ?? `The assistant could not respond. Please try again or call ${WHATSAPP_DISPLAY}.`,
       }), runIdFetch);
       if (upstreamError) {
         void response.body?.cancel().catch(() => {});

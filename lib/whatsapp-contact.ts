@@ -1,6 +1,9 @@
 export const WHATSAPP_E164 = "254755510009";
 export const WHATSAPP_DISPLAY = "+254 755 510 009";
 
+/** Same number used for voice calls and WhatsApp. */
+export const SALES_PHONE_TEL = `tel:+${WHATSAPP_E164}`;
+
 export type WhatsAppEnquiryKind = "quote" | "order" | "feedback";
 
 export function whatsAppUrl(text: string): string {
