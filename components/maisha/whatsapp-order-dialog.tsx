@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
+import { ContactLink } from "@/components/maisha/contact-link";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { track } from "@/lib/activity/client";
+import { productSlugFromName } from "@/lib/activity/product-slug";
 import { products } from "@/lib/roofing-products";
 import {
   SALES_PHONE_TEL,
@@ -41,6 +44,27 @@ export function WhatsAppOrderDialog({
   }, [open, initialProduct]);
 
   function continueOnWhatsApp() {
+    const selected = products.find(p => p.name === product);
+    const slug = product ? productSlugFromName(product) : undefined;
+
+    if (kind === "feedback") {
+      track({
+        type: "contact_click",
+        channel: "whatsapp",
+        label: "feedback-dialog",
+        message: notes.trim() || undefined,
+      });
+    } else {
+      track({
+        type: "quote_requested",
+        label: kind,
+        productName: product || undefined,
+        productSlug: slug,
+        categorySlug: selected?.category,
+        message: notes.trim() || undefined,
+      });
+    }
+
     openWhatsApp(buildWhatsAppMessage(kind, { product, notes }));
     onOpenChange(false);
   }
@@ -103,9 +127,9 @@ export function WhatsAppOrderDialog({
           </Button>
           <p className="whatsapp-order-foot">
             Prefer a call?{" "}
-            <a href={SALES_PHONE_TEL}>
+            <ContactLink href={SALES_PHONE_TEL} channel="phone" label="order-dialog" external={false}>
               {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
-            </a>
+            </ContactLink>
           </p>
         </div>
       </DialogContent>

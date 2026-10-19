@@ -6,7 +6,11 @@ import { usePathname } from "next/navigation";
 import { ArrowUpRight, ShieldCheck, Phone, Menu, X, ChevronDown, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { brandLogoUrl } from "@/lib/brand-media";
+import { track } from "@/lib/activity/client";
+import { productSlugFromName } from "@/lib/activity/product-slug";
 import { SALES_PHONE_TEL, WHATSAPP_DISPLAY, buildWhatsAppMessage, whatsAppUrl } from "@/lib/whatsapp-contact";
+import { ContactLink } from "./contact-link";
+import { PageViewTracker } from "./page-view-tracker";
 import { RoofingAssistant } from "./roofing-assistant";
 import { WhatsAppOrderDialog } from "./whatsapp-order-dialog";
 
@@ -18,25 +22,38 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
-  function openQuote(product = "") {
+  function openQuote(product = "", label = "quote-dialog") {
+    track({
+      type: "contact_click",
+      channel: "whatsapp",
+      label,
+      ...(product
+        ? { productName: product, productSlug: productSlugFromName(product) }
+        : {}),
+    });
     setSelectedProduct(product);
     setQuoteOpen(true);
   }
   const closeMenu = () => setMenuOpen(false);
   return (
-    <QuoteContext.Provider value={openQuote}>
+    <QuoteContext.Provider value={(product) => openQuote(product, "page-cta")}>
+      <PageViewTracker />
       <div className="utility-bar">
         <div className="page-width utility-inner">
           <span>
             <ShieldCheck size={12} /> Proudly made in Kenya. Trusted countrywide.
           </span>
           <div className="utility-links">
-            <a href={whatsAppUrl(buildWhatsAppMessage("order"))} target="_blank" rel="noopener noreferrer">
+            <ContactLink
+              href={whatsAppUrl(buildWhatsAppMessage("order"))}
+              channel="whatsapp"
+              label="utility-bar"
+            >
               <MessageCircle size={12} /> Order on WhatsApp · {WHATSAPP_DISPLAY}
-            </a>
-            <a href={SALES_PHONE_TEL}>
+            </ContactLink>
+            <ContactLink href={SALES_PHONE_TEL} channel="phone" label="utility-bar" external={false}>
               <Phone size={11} /> {WHATSAPP_DISPLAY}
-            </a>
+            </ContactLink>
           </div>
         </div>
       </div>
@@ -64,7 +81,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <a href="/#contact">Contact Us</a>
           </nav>
           <div className="header-actions">
-            <Button variant="whatsapp" onClick={() => openQuote()}>
+            <Button variant="whatsapp" onClick={() => openQuote("", "header-cta")}>
               Order on WhatsApp <MessageCircle />
             </Button>
             <Button variant="ghost" size="icon" className="mobile-menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
@@ -94,7 +111,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               className="mt-3 w-full"
               onClick={() => {
                 closeMenu();
-                openQuote();
+                openQuote("", "mobile-nav");
               }}
             >
               Order on WhatsApp <MessageCircle />
@@ -115,12 +132,16 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <div className="footer-links">
               <Link href="/products">Our Products</Link>
               <Link href="/why-maisha">Why Maisha</Link>
-              <a href={whatsAppUrl(buildWhatsAppMessage("order"))} target="_blank" rel="noopener noreferrer">
+              <ContactLink
+                href={whatsAppUrl(buildWhatsAppMessage("order"))}
+                channel="whatsapp"
+                label="footer"
+              >
                 WhatsApp {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
-              </a>
-              <a href={SALES_PHONE_TEL}>
+              </ContactLink>
+              <ContactLink href={SALES_PHONE_TEL} channel="phone" label="footer" external={false}>
                 Call {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
-              </a>
+              </ContactLink>
             </div>
           </div>
           <div className="footer-bottom">
@@ -130,14 +151,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
       </footer>
       <Suspense>
-        <RoofingAssistant onQuote={() => openQuote()} hidden={quoteOpen} />
+        <RoofingAssistant onQuote={() => openQuote("", "roofing-assistant")} hidden={quoteOpen} />
       </Suspense>
       <WhatsAppOrderDialog open={quoteOpen} onOpenChange={setQuoteOpen} initialProduct={selectedProduct} />
       <button
         type="button"
         className="whatsapp-quick-fab"
         aria-label={`Order on WhatsApp ${WHATSAPP_DISPLAY}`}
-        onClick={() => openQuote()}
+        onClick={() => openQuote("", "float")}
       >
         <MessageCircle aria-hidden />
         <span>WhatsApp order</span>
