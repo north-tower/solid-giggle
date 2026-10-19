@@ -110,6 +110,48 @@ export const products = [
     description: "Simba Power Portland cement, 42.5N grade, for structural work and high-strength mixes.",
     priceKshPerBag: 700,
   },
+  {
+    name: "Cement bulk (50–100 bags)",
+    category: "Building materials",
+    image: officialProductImages.simbaCement,
+    description: "Wholesale cement — approx. 2.5–5 tonnes (50–100 bags). Confirm grade and delivery with sales.",
+    priceKshPerBag: 550,
+  },
+  {
+    name: "Cement bulk — Canter truck (150–200 bags)",
+    category: "Building materials",
+    image: officialProductImages.simbaPowerCement,
+    description: "Medium bulk load — approx. 7.5–10 tonnes (150–200 bags). Confirm grade and delivery with sales.",
+    priceKshPerBag: 510,
+  },
+  {
+    name: "Cement bulk — Full trailer (wholesale)",
+    category: "Building materials",
+    image: officialProductImages.cementBulkTrailer,
+    description: "Full trailer wholesale — approx. 30–40 tonnes (600–800 bags). Confirm grade and delivery with sales.",
+    priceKshPerBag: 480,
+  },
+  {
+    name: "D16",
+    category: "Building materials",
+    image: officialProductImages.d16Rebar,
+    description: "16 mm deformed steel bar (rebar) for reinforced concrete work.",
+    priceKshPerBar: 2050,
+  },
+  {
+    name: "D8",
+    category: "Building materials",
+    image: officialProductImages.d8Rebar,
+    description: "8 mm deformed steel bar (rebar) for reinforced concrete work.",
+    priceKshPerBar: 500,
+  },
+  {
+    name: "D10",
+    category: "Building materials",
+    image: officialProductImages.d10Rebar,
+    description: "10 mm deformed steel bar (rebar) for reinforced concrete work.",
+    priceKshPerBar: 700,
+  },
 ] as const;
 
 export type RoofingProduct = (typeof products)[number];
@@ -136,6 +178,9 @@ export function productPriceLabel(product: RoofingProduct): string | null {
   if ("priceKshPerBag" in product && product.priceKshPerBag != null) {
     return `Ksh ${product.priceKshPerBag} per bag`;
   }
+  if ("priceKshPerBar" in product && product.priceKshPerBar != null) {
+    return `Ksh ${product.priceKshPerBar.toLocaleString("en-KE")} per bar`;
+  }
   return null;
 }
 
@@ -146,6 +191,7 @@ export function productSaleNote(product: RoofingProduct): string {
   if ("priceKshPerRoll" in product && product.priceKshPerRoll != null) return "Sold per roll";
   if ("priceKshPerMeter" in product && product.priceKshPerMeter != null) return "Sold by the meter";
   if ("priceKshPerBag" in product && product.priceKshPerBag != null) return "Sold per bag";
+  if ("priceKshPerBar" in product && product.priceKshPerBar != null) return "Sold per bar";
   if (product.category === "Accessories") return "Sold by weight";
   return "Customised sizes";
 }
@@ -158,6 +204,7 @@ export function productUnitLabel(product: RoofingProduct): string {
   if ("priceKshPerRoll" in product && product.priceKshPerRoll != null) return "Per roll";
   if ("priceKshPerMeter" in product && product.priceKshPerMeter != null) return "Per meter";
   if ("priceKshPerBag" in product && product.priceKshPerBag != null) return "Per bag";
+  if ("priceKshPerBar" in product && product.priceKshPerBar != null) return "Per bar";
   if (product.category === "Accessories") return "Per kilogram";
   return "Confirm with sales team";
 }

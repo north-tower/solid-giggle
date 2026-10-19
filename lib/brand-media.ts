@@ -18,4 +18,8 @@ export const officialProductImages = {
   ordinaryDumuzaz: "/maisha-ordinary-dumuzaz.png",
   simbaCement: "/maisha-simba-cement.png",
   simbaPowerCement: "/maisha-simba-power-cement.png",
+  cementBulkTrailer: "/maisha-cement-bulk-trailer.jpg",
+  d16Rebar: "/maisha-d16-rebar.jpg",
+  d8Rebar: "/maisha-d8-rebar.jpg",
+  d10Rebar: "/maisha-d10-rebar.png",
 } as const;
