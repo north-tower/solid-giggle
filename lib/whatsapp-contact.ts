@@ -1,5 +1,8 @@
-export const WHATSAPP_E164 = "254755510009";
-export const WHATSAPP_DISPLAY = "+254 755 510 009";
+export const WHATSAPP_E164 = "254781220004";
+export const WHATSAPP_DISPLAY = "+254 781 220 004";
+
+export const SALES_EMAIL = "mabatikenyamaisha@gmail.com";
+export const SALES_EMAIL_MAILTO = `mailto:${SALES_EMAIL}`;
 
 /** Same number used for voice calls and WhatsApp. */
 export const SALES_PHONE_TEL = `tel:+${WHATSAPP_E164}`;

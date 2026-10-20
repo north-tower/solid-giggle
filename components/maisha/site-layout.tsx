@@ -8,7 +8,14 @@ import { Button } from "@/components/ui/button";
 import { brandLogoUrl } from "@/lib/brand-media";
 import { track } from "@/lib/activity/client";
 import { productSlugFromName } from "@/lib/activity/product-slug";
-import { SALES_PHONE_TEL, WHATSAPP_DISPLAY, buildWhatsAppMessage, whatsAppUrl } from "@/lib/whatsapp-contact";
+import {
+  SALES_EMAIL,
+  SALES_EMAIL_MAILTO,
+  SALES_PHONE_TEL,
+  WHATSAPP_DISPLAY,
+  buildWhatsAppMessage,
+  whatsAppUrl,
+} from "@/lib/whatsapp-contact";
 import { ContactLink } from "./contact-link";
 import { PageViewTracker } from "./page-view-tracker";
 import { RoofingAssistant } from "./roofing-assistant";
@@ -141,6 +148,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               </ContactLink>
               <ContactLink href={SALES_PHONE_TEL} channel="phone" label="footer" external={false}>
                 Call {WHATSAPP_DISPLAY} <ArrowUpRight className="inline size-3" />
+              </ContactLink>
+              <ContactLink href={SALES_EMAIL_MAILTO} channel="email" label="footer">
+                {SALES_EMAIL} <ArrowUpRight className="inline size-3" />
               </ContactLink>
             </div>
           </div>
